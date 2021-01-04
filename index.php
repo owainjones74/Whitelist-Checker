@@ -51,10 +51,15 @@ if (!is_numeric($page)) {
                         $entries = 20;
                         foreach($users as $key => $user) {
                             if ((($key+1) > ($page*$entries)) or (($key+1) <= (($page*$entries) - $entries))) continue;
+                            $user = str_replace(" ", "", $user)
                     ?>
                     <tr>
                         <td><?= htmlspecialchars(GetName($user)) ?> (<?= $user ?>)</td>
-                        <td>Bruh</td>
+                        <td style="text-align: center;">
+                            <a href="https://thexyznetwork.xyz/profile/<?= $user ?>" class="ui inverted blue button">xSuite</a>
+                            <a href="https://thexyznetwork.xyz/lookup/<?= $user ?>" class="ui inverted red  button">Lookup</a>
+                            <a href="https://steamcommunity.com/profiles/<?= $user ?>" class="ui inverted grey button">Steam</a>
+                        </td>
                     </tr>
                     <?php } ?>
                 </tbody>
