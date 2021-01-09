@@ -47,6 +47,46 @@ if ($searchTerms == "") {
                 </div>
             <?php } ?>
 
+            <script>
+                $("document").ready(function() {
+                    for(i = 0; i < 10; i++) {
+                        let table = document.getElementById("table");
+                        let row = table.insertRow(-1);
+
+                        let cell1 = row.insertCell(0);
+
+                        cell1.innerHTML = "Test";
+                    };
+                    let table = document.getElementById("table");
+                    let row = table.insertRow(-1);
+                    row.insertCell(0);
+                    $('table').api({
+                        url: 'http://localhost/Whitelist-Checker/api/job.php?job=<?php echo urlencode($searchTerms) ?>',
+                        onResponse: function(response) {
+                            let result = [];
+                            let count = 10
+                            for(i = 0; i < Object.keys(response).length; i++) {
+                                result.push(response[i]);
+                            };
+                            $('table').visibility({
+                                once: false,
+                                observeChanges: true,
+                                onBottomVisible: function() {
+                                    for(i = 0; i < 10; i++) {
+                                        let table = document.getElementById("table");
+                                        let row = table.insertRow(-1);
+
+                                        let cell1 = row.insertCell(0);
+                                        cell1.innerHTML = result[i];
+                                        result.shift();
+                                    };
+                                }
+                            });
+                        }
+                    });
+                });
+            </script>
+
             <div class="ui inverted segment" style="text-align: center;">
                 Made with ❤️ by <a href="https://0wain.xyz/">Owain</a>
             </div>
