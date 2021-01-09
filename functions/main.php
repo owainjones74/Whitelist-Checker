@@ -1,6 +1,6 @@
 <?php
 $APIKey = "YtEO87uFPvBQqca7q8Fofbu2ejQBJ71XjPdMUksf";
-require_once("lib/cache.class.php");
+require_once("../lib/cache.class.php");
 $cache = new Cache();
 
 function GetWhitelists($team) {
