@@ -21,7 +21,9 @@ if (!is_numeric($page)) {
 <html lang="en">
     <head>
         <title>The XYZ Network Whitelist Job Lookup</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.css" integrity="sha256-8CEI/ltDBxfGb0lev/b4YiRbQSPlllT89ukpFKC3Frg=" crossorigin="anonymous" />
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.7/dist/semantic.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.7/dist/semantic.min.js"></script>
         <link rel="stylesheet" href="css/styles.css?v=1.0">
     </head>
 
@@ -46,7 +48,7 @@ if (!is_numeric($page)) {
                         <th>Links</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="table">
                     <?php
                         $entries = 20;
                         foreach($users as $key => $user) {
