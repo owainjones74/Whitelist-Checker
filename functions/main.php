@@ -27,7 +27,7 @@ function GetWhitelists($team) {
         return NULL;
     }
 
-    return $response->result->users;
+    return array_slice($response->result->users, 0, 200);
 }
 
 function GetName($id) {
