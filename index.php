@@ -34,7 +34,8 @@ if ($searchTerms == "") {
             <table class="ui celled inverted table">
                 <thead>
                     <tr>
-                        <th>Name (SteamID 64)</th>
+                        <th>Username</th>
+                        <th>SteamID 64</th>
                         <th>Links</th>
                     </tr>
                 </thead>
@@ -52,7 +53,7 @@ if ($searchTerms == "") {
 
             <script>
                 $(document).ready(function() {
-                    $.get("http://localhost/Whitelist-Checker/api/job.php?job=<?php echo urlencode($searchTerms) ?>", function(data) {
+                    $.get("https://0wain.xyz/whitelistchecker/api/job.php?job=<?php echo urlencode($searchTerms) ?>", function(data) {
                         let result = Object.values(data);
                         let table = document.getElementById("table");
                         let loading = document.getElementById("loading");
@@ -60,12 +61,23 @@ if ($searchTerms == "") {
                         $('table').visibility({
                             once: false,
                             observeChanges: true,
-                            onBottomVisible: function() {
+                            onBottomVisible: async function() {
+                                async function getName(id) {
+                                    return $.ajax({
+                                        url: `https://0wain.xyz/whitelistchecker/api/name.php?id=${id}`,
+                                        type: 'GET',
+                                    });
+                                };
+
                                 for(i = 0; i < 20; i++) {
                                     if(!result[0]) break;
+                                    if(result[0] === "No job found with this name") break;
+                                    let username = await getName(result[0]);
                                     let row = table.insertRow(-1);
-                                    let steamidCell = row.insertCell(0);
-                                    let linkCell = row.insertCell(1);
+                                    let nameCell = row.insertCell(0);
+                                    let steamidCell = row.insertCell(1);
+                                    let linkCell = row.insertCell(2);
+                                    nameCell.innerHTML = username
                                     steamidCell.innerHTML = result[0];
                                     linkCell.innerHTML = `<td style="text-align: center;">
                                         <a href="https://thexyznetwork.xyz/profile/${result[0]}" class="ui inverted blue button">xSuite</a>
@@ -81,7 +93,7 @@ if ($searchTerms == "") {
             </script>
 
             <div class="ui inverted segment" style="text-align: center;">
-                Made with ❤️ by <a href="https://0wain.xyz/">Owain</a>
+                Made with ❤️ by <a href="https://0wain.xyz/">Owain</a> & <a href="https://tomsci.team/">Tomsci</a>
             </div>
         </div>
     </body>
