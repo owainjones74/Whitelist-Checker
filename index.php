@@ -45,6 +45,8 @@ if ($searchTerms == "") {
             <div class="ui segment inverted" style="background-color: #2b2b2b; height: 600px;" id="loading">
                 <div class="ui active text loader">Loading Data</div>
             </div>
+            <div id="error">
+            </div>
             <?php } else { ?>
                 <div class="ui inverted segment" style="text-align: center;">
                     Please search for a job in the above text box! Alternatively, the job you entered may not be a valid whitelist!
@@ -69,10 +71,21 @@ if ($searchTerms == "") {
                                     });
                                 };
 
+                                if(result[0] === "No job found with this name") {
+                                    let error = document.getElementById("error");
+                                    error.innerHTML = `<div class="ui negative message">
+                                        <div class="header">
+                                            There is no whitelist with that name!
+                                        </div>
+                                        <p>Please try searching for a job with a different name.</p>
+                                    </div>`;
+                                };
+
                                 for(i = 0; i < 20; i++) {
                                     if(!result[0]) break;
                                     if(result[0] === "No job found with this name") break;
                                     let username = await getName(result[0]);
+                                    if(!result[0]) break;
                                     let row = table.insertRow(-1);
                                     let nameCell = row.insertCell(0);
                                     let steamidCell = row.insertCell(1);
