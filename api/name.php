@@ -8,4 +8,4 @@ if (!$name) {
     exit;
 }
 
-echo $name;
+echo htmlspecialchars($name);
