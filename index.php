@@ -103,15 +103,15 @@ if ($searchTerms == "") {
                                     let linkCell = row.insertCell(2);
                                     nameCell.innerHTML = username
                                     steamidCell.innerHTML = result[0];
-                                    result.shift();
-
-
                                     linkCell.innerHTML = `<td style="text-align: center;">
                                         <a href="https://thexyznetwork.xyz/profile/${result[0]}" class="ui inverted blue button">xSuite</a>
                                         <a href="https://thexyznetwork.xyz/lookup/${result[0]}" class="ui inverted red  button">Lookup</a>
                                         <a href="https://steamcommunity.com/profiles/${result[0]}" class="ui inverted grey button">Steam</a>
                                         <button id="activity_${result[0]}" class="ui inverted pink button">Activity</button>
                                     </td>`;
+                                    result.shift();
+
+
 
                                     $("#activity_" + result[0]).click( async function()
                                         {
