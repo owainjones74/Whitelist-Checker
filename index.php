@@ -224,7 +224,7 @@ if ($searchTerms == "") {
                                     $("#activity_" + result[0]).click(async function() {
                                         $("body").append(`<div id="modal_${steamidCell.innerHTML}" class="ui modal">
                                             <i class="close icon"></i>
-                                            <div class="header">User Activity</div>
+                                            <div class="header" id="header_${steamidCell.innerHTML}">User Activity</div>
                                             <div id="modal_${steamidCell.innerHTML}_content" class="scrolling content">
                                                 <p >
                                                     <div class="ui active inverted dimmer">
@@ -260,7 +260,9 @@ if ($searchTerms == "") {
                                                 <tbody id="#modal_${steamidCell.innerHTML}_table">
                                                 </tbody>
                                             </table>`);
-                                                
+
+                                            let alltimeTotal = new Date(0);
+                                            let last7daysTotal = new Date(0);
                                             userActivity.forEach(function(data) {
                                                 let tbl = document.getElementById(`#modal_${steamidCell.innerHTML}_table`);
                                                 let row = tbl.insertRow(-1);
@@ -276,7 +278,16 @@ if ($searchTerms == "") {
                                                 let total = new Date(0);
                                                 total.setSeconds(data.leave-data.join);
                                                 totalPlayed.innerHTML = total.toISOString().substr(11, 8);
+
+                                                if(data.leave * 1000 > (Date.now()-604800000).toString()) {
+                                                    last7daysTotal.setSeconds(data.leave-data.join);
+                                                };
+                                                alltimeTotal.setSeconds(data.leave-data.join);
                                             });
+
+                                            let header = document.getElementById(`header_${steamidCell.innerHTML}`);
+                                            header.innerHTML = `<p style="margin-bottom: 3px">User Activity</p>
+                                            <p style="font-size: 15px">Last 7 Days (h/m/s): ${last7daysTotal.toISOString().substr(11, 8)} | All Time On Record (h/m/s): ${alltimeTotal.toISOString().substr(11, 8)}</p>`;
                                         };
                                     });
                                     result.shift();
