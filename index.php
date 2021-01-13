@@ -233,7 +233,7 @@ if ($searchTerms == "") {
 
                                         $("#modal_" + steamidCell.innerHTML).modal("show");
 
-                                        let userActivity = await showActivity(result[0]);
+                                        let userActivity = await showActivity(steamidCell.innerHTML);
 
                                         if(userActivity.error) {
                                             $(`#modal_${steamidCell.innerHTML}_content`).empty();
