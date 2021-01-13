@@ -1,5 +1,5 @@
 <?php
-$domain = $_SERVER['HTTP_HOST'];
+$domain = "https://" . $_SERVER['HTTP_HOST'] . "/whitelistchecker";
 
 // Filter search
 $searchTerms = isset($_GET['search']) ? $_GET['search'] : NULL;
@@ -59,12 +59,12 @@ if ($searchTerms == "") {
                 $(document).ready(function() {
                     async function showActivity(id) {
                         return $.ajax({
-                            url: `/api/activity.php?id=${id}&job=<?= $searchTerms ?>`,
+                            url: `<?= $domain ?>/api/activity.php?id=${id}&job=<?= $searchTerms ?>`,
                             type: 'GET',
                         });
                     }
 
-                    $.get("/api/job.php?job=<?php echo urlencode($searchTerms) ?>", function(data) {
+                    $.get("<?= $domain ?>/api/job.php?job=<?php echo urlencode($searchTerms) ?>", function(data) {
                         let result = Object.values(data);
                         let table = document.getElementById("table");
                         let loading = document.getElementById("loading");
@@ -76,7 +76,7 @@ if ($searchTerms == "") {
                             onBottomVisible: async function() {
                                 async function getName(id) {
                                     return $.ajax({
-                                        url: `/api/name.php?id=${id}`,
+                                        url: `<?= $domain ?>/api/name.php?id=${id}`,
                                         type: 'GET',
                                     });
                                 };
