@@ -23,7 +23,7 @@ if ($searchTerms == "") {
             <div class="ui inverted segment" style="text-align: center;">
                 Search for a job and see everyone who's whitelisted to it!
             </div>
-            <form>
+            <form id="searchform">
                 <div class="ui inverted segment" style="text-align: center;">
                     <div class="ui search">
                         <div class="ui fluid inverted icon input">
@@ -170,7 +170,10 @@ if ($searchTerms == "") {
 
                     $(".ui.search").search({
                         type: "category",
-                        source: whitelists
+                        source: whitelists,
+                        onSelect: function() {
+                            document.forms["searchform"].submit();
+                        }
                     });
 
                     $.get("<?= $domain ?>/api/job.php?job=<?php echo urlencode($searchTerms) ?>", function(data) {
