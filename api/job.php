@@ -1,5 +1,5 @@
 <?php
-require_once "..//functions/main.php";
+require_once "../functions/main.php";
 
 header('Content-Type: application/json');
 

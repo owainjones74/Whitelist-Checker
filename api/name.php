@@ -1,5 +1,5 @@
 <?php
-require_once "..//functions/main.php";
+require_once "../functions/main.php";
 
 $name = GetName($_GET['id']);
 

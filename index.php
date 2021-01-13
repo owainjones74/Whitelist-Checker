@@ -1,4 +1,6 @@
 <?php
+$domain = $_SERVER['HTTP_HOST'];
+
 // Filter search
 $searchTerms = isset($_GET['search']) ? $_GET['search'] : NULL;
 if ($searchTerms == "") {
@@ -55,21 +57,30 @@ if ($searchTerms == "") {
 
             <script>
                 $(document).ready(function() {
-                    $.get("https://0wain.xyz/whitelistchecker/api/job.php?job=<?php echo urlencode($searchTerms) ?>", function(data) {
+                    async function showActivity(id) {
+                        return $.ajax({
+                            url: `/api/activity.php?id=${id}&job=<?= $searchTerms ?>`,
+                            type: 'GET',
+                        });
+                    }
+
+                    $.get("/api/job.php?job=<?php echo urlencode($searchTerms) ?>", function(data) {
                         let result = Object.values(data);
                         let table = document.getElementById("table");
                         let loading = document.getElementById("loading");
                         loading.remove();
+
                         $('table').visibility({
                             once: false,
                             observeChanges: true,
                             onBottomVisible: async function() {
                                 async function getName(id) {
                                     return $.ajax({
-                                        url: `https://0wain.xyz/whitelistchecker/api/name.php?id=${id}`,
+                                        url: `/api/name.php?id=${id}`,
                                         type: 'GET',
                                     });
                                 };
+
 
                                 if(result[0] === "No job found with this name") {
                                     let error = document.getElementById("error");
@@ -92,16 +103,90 @@ if ($searchTerms == "") {
                                     let linkCell = row.insertCell(2);
                                     nameCell.innerHTML = username
                                     steamidCell.innerHTML = result[0];
+                                    result.shift();
+
+
                                     linkCell.innerHTML = `<td style="text-align: center;">
                                         <a href="https://thexyznetwork.xyz/profile/${result[0]}" class="ui inverted blue button">xSuite</a>
                                         <a href="https://thexyznetwork.xyz/lookup/${result[0]}" class="ui inverted red  button">Lookup</a>
                                         <a href="https://steamcommunity.com/profiles/${result[0]}" class="ui inverted grey button">Steam</a>
+                                        <button id="activity_${result[0]}" class="ui inverted pink button">Activity</button>
                                     </td>`;
-                                    result.shift();
+
+                                    $("#activity_" + result[0]).click( async function()
+                                        {
+                                            $("body").append(`<div id="modal_${steamidCell.innerHTML}" class="ui modal">
+                                                <i class="close icon"></i>
+                                                <div class="header">User Activity</div>
+                                                <div id="modal_${steamidCell.innerHTML}_content" class="scrolling content">
+                                                    <p >
+                                                        <div class="ui active inverted dimmer">
+                                                          <div class="ui large text loader">Loading Activity</div>
+                                                        </div>
+                                                    </p>
+                                                </div>
+                                            </div>`)
+                                            $('#modal_' + steamidCell.innerHTML)
+                                                .modal('show')
+                                            ;
+
+                                            let userActivity = await showActivity(steamidCell.innerHTML);
+
+                                            if (userActivity.error) {
+                                                $(`#modal_${steamidCell.innerHTML}_content`).empty();
+                                                $(`#modal_${steamidCell.innerHTML}_content`).html(`
+                                                <div class="ui negative message">
+                                                    <div class="header">
+                                                        There seems to be an issue!
+                                                    </div>
+                                                    <p>${userActivity.error}</p>
+                                                </div>
+                                                `);
+                                            } else {
+                                                $(`#modal_${steamidCell.innerHTML}_content`).empty();
+                                                $(`#modal_${steamidCell.innerHTML}_content`).html(`
+                                                    <table class="ui very basic celled padded table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Job</th>
+                                                                <th>Joined (d/m/y)</th>
+                                                                <th>Left (d/m/y)</th>
+                                                                <th>Time Played (h/m/s)</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="#modal_${steamidCell.innerHTML}_table">
+                                                        </tbody>
+                                                    </table>
+                                                `);
+
+
+                                                userActivity.forEach(function(data) {
+                                                    let tbl = document.getElementById(`#modal_${steamidCell.innerHTML}_table`);
+                                                    let row = tbl.insertRow(-1);
+                                                    let totalPlayed = row.insertCell(0);
+                                                    let left = row.insertCell(0);
+                                                    let joined = row.insertCell(0);
+                                                    let jobName = row.insertCell(0);
+
+                                                    jobName.innerHTML = data.job;
+                                                    joined.innerHTML = new Date(data.join*1000).toLocaleString();
+                                                    left.innerHTML = new Date(data.leave*1000).toLocaleString();
+
+                                                    let total = new Date(0)
+                                                    total.setSeconds(data.leave-data.join)
+                                                    totalPlayed.innerHTML = total.toISOString().substr(11, 8);
+                                                })
+
+
+
+                                            }
+                                        }
+                                    );
                                 };
                             }
                         });
                     });
+
                 });
             </script>
 
