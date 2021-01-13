@@ -63,7 +63,7 @@ if ($searchTerms == "") {
                     async function showActivity(id) {
                         return $.ajax({
                             url: `<?= $domain ?>/api/activity.php?id=${id}&job=<?= $searchTerms ?>`,
-                            type: 'GET'
+                            type: "GET"
                         });
                     };
                                                         
@@ -179,14 +179,14 @@ if ($searchTerms == "") {
                         let loading = document.getElementById("loading");
                         loading.remove();
 
-                        $('table').visibility({
+                        $("table").visibility({
                             once: false,
                             observeChanges: true,
                             onBottomVisible: async function() {
                                 async function getName(id) {
                                     return $.ajax({
                                         url: `<?= $domain ?>/api/name.php?id=${id}`,
-                                        type: 'GET',
+                                        type: "GET",
                                     });
                                 };
 
