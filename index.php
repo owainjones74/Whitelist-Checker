@@ -60,6 +60,19 @@ if ($searchTerms == "") {
 
             <script>
                 $(document).ready(function() {
+                    function toTimeFormat(totalSeconds) {
+                        hours = Math.floor(totalSeconds / 3600);
+                        totalSeconds %= 3600;
+                        minutes = Math.floor(totalSeconds / 60);
+                        seconds = totalSeconds % 60;
+
+                        minutes = String(minutes).padStart(2, "0");
+                        hours = String(hours).padStart(2, "0");
+                        seconds = String(seconds).padStart(2, "0");
+
+                        return `${hours}:${minutes}:${seconds}`;
+                    };
+                    
                     async function showActivity(id) {
                         return $.ajax({
                             url: `<?= $domain ?>/api/activity.php?id=${id}&job=<?= $searchTerms ?>`,
@@ -277,7 +290,7 @@ if ($searchTerms == "") {
 
                                                 let total = new Date(0);
                                                 total.setSeconds(data.leave-data.join);
-                                                totalPlayed.innerHTML = total.toISOString().substr(11, 8);
+                                                totalPlayed.innerHTML = toTimeFormat(total / 1000);
 
                                                 if(data.leave * 1000 > (Date.now()-604800000).toString()) {
                                                     last7daysTotal.setSeconds(data.leave-data.join);
@@ -287,7 +300,7 @@ if ($searchTerms == "") {
 
                                             let header = document.getElementById(`header_${steamidCell.innerHTML}`);
                                             header.innerHTML = `<p style="margin-bottom: 3px">User Activity</p>
-                                            <p style="font-size: 15px">Last 7 Days (h/m/s): ${last7daysTotal.toISOString().substr(11, 8)} | All Time On Record (h/m/s): ${alltimeTotal.toISOString().substr(11, 8)}</p>`;
+                                            <p style="font-size: 15px">Last 7 Days (h/m/s): ${toTimeFormat(last7daysTotal / 1000)} | All Time On Record (h/m/s): ${toTimeFormat(alltimeTotal / 1000)}</p>`;
                                         };
                                     });
                                     result.shift();
