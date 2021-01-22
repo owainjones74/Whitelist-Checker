@@ -20,6 +20,7 @@ $category = NULL;
 $finder = [
     "pd" => "Police",
     "sd" => "Sheriff",
+    "sd" => "Undersheriff",
     "fbi" => "FBI",
     "swat" => "SWAT",
     "usms" => "Marshal",
