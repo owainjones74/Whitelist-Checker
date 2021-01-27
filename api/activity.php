@@ -20,28 +20,27 @@ $category = NULL;
 $finder = [
     "pd" => "Police",
     "sd" => "Sheriff",
-    "sd" => "Undersheriff",
     "fbi" => "FBI",
     "swat" => "SWAT",
     "usms" => "Marshal",
-    "firerescue" => "Fire Chief",
-    "firerescue" => "Assistant Chief",
-    "firerescue" => "Deputy Chief",
-    "firerescue" => "Battalion Chief",
-    "firerescue" => "Captain",
-    "firerescue" => "Lieutenant",
-    "firerescue" => "Supervisor",
-    "firerescue" => "Senior Engineer",
-    "firerescue" => "Engineer",
-    "firerescue" => "Firefighter",
+    "firerescue" => ["Fire Chief", "Assistant Chief", "Deputy Chief", "Battalion Chief", "Captain", "Lieutenant", "Supervisor", "Senior Engineer", "Engineer", "Firefighter"],
     "terrorist" => "Terrorist ",
     "mafia" => "Mafia"
 ];
 
 foreach($finder as $key => $value) {
-    if (!(strpos(strtolower($job), strtolower($value)) === false)) {
-        $category = $key;
-        break;
+    if (is_array($value)) {
+        foreach($value as $subValue) {
+            if (!(strpos(strtolower($job), strtolower($subValue)) === false)) {
+                $category = $key;
+                break 2;
+            }
+        }
+    } else {
+        if (!(strpos(strtolower($job), strtolower($value)) === false)) {
+            $category = $key;
+            break;
+        }
     }
 }
 
