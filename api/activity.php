@@ -39,7 +39,7 @@ $finder = [
 ];
 
 foreach($finder as $key => $value) {
-    if (!(strpos($job, $value) === false)) {
+    if (!(strpos(strtolower($job), strtolower($value)) === false)) {
         $category = $key;
         break;
     }
